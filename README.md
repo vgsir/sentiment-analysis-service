@@ -20,23 +20,23 @@ This project implements a sentiment analysis service using Flask, JWT for authen
 
 ## Installation
 
-1. Clone the Repository
+1. ### Clone the Repository
 
 git clone https://github.com/vgsir/sentiment-analysis-service.git
 
 cd sentiment-analysis-service
 
-2. Set up a Virtual Environment
+2. ### Set up a Virtual Environment
 
 python -m venv venv
 
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 
-3. Install Dependencies
+3. ### Install Dependencies
 
 pip install -r requirements.txt
 
-4. Environment Variables
+4. ### Environment Variables
 
 - Create a .env file in the root directory.
 - Add your FLASK_SECRET_KEY and OPENAI_API_KEY:
