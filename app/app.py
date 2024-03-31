@@ -10,40 +10,45 @@ from functools import wraps
 # Import for accessing Flask and OpenAI secret keys as environment variables
 from dotenv import load_dotenv, find_dotenv
 
+# Load environment variables from a .env file, if available
 load_dotenv(find_dotenv(), override=True)
 
-# Run Flask application
+# Initialize Flask application
 app = Flask(__name__)
+
+# Configure secret key for JWT from environment variables
 app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY")
 
+# A mock user database for demonstration purposes
 users = {
     "user1": "password1",
 }
 
-
+# Decorator for enforcing authentication
 def auth_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        # Your existing Basic Auth code...
         return f(*args, **kwargs)
-
     return decorated
 
-
+# Decorator for token-based authentication
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+        # Extract token from Authorization header
         token = None
 
         if "Authorization" in request.headers and request.headers[
             "Authorization"
         ].startswith("Bearer "):
             token = request.headers["Authorization"].split(" ")[1]
-
+        
+        # If no token found, return error
         if not token:
             return jsonify({"message": "Token is missing!"}), 403
 
         try:
+            # Decode token using the secret key
             decode_data = jwt.decode(
                 token, app.config["SECRET_KEY"], algorithms=["HS256"]
             )
@@ -55,11 +60,12 @@ def token_required(f):
 
     return decorated
 
-
+# Endpoint for user authentication
 @app.route("/auth", methods=["POST"])
 @auth_required
 def login():
     auth = request.authorization
+    # Encode a new token for the user
     token = jwt.encode(
         {
             "user": auth.username,
@@ -70,7 +76,7 @@ def login():
 
     return jsonify({"token": token})
 
-
+# Endpoint for performing sentiment analysis
 @app.route("/sentiment", methods=["POST"])
 @token_required
 def analyze_sentiment_openai(current_user):
@@ -80,11 +86,13 @@ def analyze_sentiment_openai(current_user):
     text = data.get("text")
     if not text:
         return jsonify({"error": "No text provided"}), 400
-
+    
+    # Get OpenAI API key from environment variables
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     if not OPENAI_API_KEY:
         return jsonify({"error": "API key not configured"}), 500
-
+    
+    # Prepare headers and payload for OpenAI API request
     headers = {"Authorization": f"Bearer {OPENAI_API_KEY}"}
     payload = {
         "model": "gpt-3.5-turbo",
@@ -98,28 +106,30 @@ def analyze_sentiment_openai(current_user):
     }
 
     try:
+        # Send request to OpenAI API
         response = requests.post(
             "https://api.openai.com/v1/chat/completions", headers=headers, json=payload
         )
         response.raise_for_status()
         response_json = response.json()
+        # Extract and return sentiment value from the response
         sentiment_text = response_json["choices"][0]["message"]["content"]
 
         return jsonify({"sentiment_value": sentiment_text})
     except Exception as err:
+        # Fallback to local sentiment analysis in case of an error
         print(f"Falling back due to error: {err}")
         return analyze_sentiment()  # Call the fallback method
 
 
-# Identify the sentiment analysis pipeline from huggingface as fallback option
+# Fallback sentiment analysis function using Hugging Face's Transformers - Bert model
 sentiment_pipeline = pipeline(
     "sentiment-analysis",
     model="nlptown/bert-base-multilingual-uncased-sentiment",  # Used fine-tuned bert model as local model
 )
 
-
+# Fallback sentiment analysis using Hugging Face pipeline.
 def analyze_sentiment():
-    """Fallback sentiment analysis using Hugging Face pipeline."""
     try:
         data = request.get_json()
         if not data or "text" not in data:
@@ -127,15 +137,15 @@ def analyze_sentiment():
 
         text = data["text"]
 
-        # Assuming sentiment_pipeline is previously defined and imported
         result = sentiment_pipeline(text)[0]
 
+        # Calculate sentiment value based on the label
         sentiment_value = (
             result["score"] if result["label"] == "POSITIVE" else -result["score"]
         )
         return jsonify({"sentiment_value": sentiment_value})
     except Exception as e:
-        # Return a generic server error status (500) and the error message
+        # Handle errors and provide feedback
         return (
             jsonify(
                 {
@@ -146,6 +156,6 @@ def analyze_sentiment():
             500,
         )
 
-
+# Start the Flask application
 if __name__ == "__main__":
     app.run(debug=True)
