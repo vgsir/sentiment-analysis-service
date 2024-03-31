@@ -12,21 +12,13 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv(), override=True)
 
-# No need to import TextBlob if not used in the script
-# from textblob import TextBlob
-
+# Run Flask application
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY")
 
 users = {
     "user1": "password1",
 }
-
-# Load the sentiment analysis pipeline from huggingface
-sentiment_pipeline = pipeline(
-    "sentiment-analysis",
-    model="nlptown/bert-base-multilingual-uncased-sentiment",  # Used fine-tuned bert model as local model
-)
 
 
 def auth_required(f):
@@ -117,6 +109,13 @@ def analyze_sentiment_openai(current_user):
     except Exception as err:
         print(f"Falling back due to error: {err}")
         return analyze_sentiment()  # Call the fallback method
+
+
+# Identify the sentiment analysis pipeline from huggingface as fallback option
+sentiment_pipeline = pipeline(
+    "sentiment-analysis",
+    model="nlptown/bert-base-multilingual-uncased-sentiment",  # Used fine-tuned bert model as local model
+)
 
 
 def analyze_sentiment():
