@@ -12,7 +12,9 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv(), override=True)
 
-# Run Flask app
+# No need to import TextBlob if not used in the script
+# from textblob import TextBlob
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY")
 
