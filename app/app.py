@@ -1,3 +1,4 @@
+# Import necessary libraries for the project
 from flask import Flask, request, jsonify
 import jwt
 import datetime
@@ -5,13 +6,13 @@ import os
 import requests
 from transformers import pipeline
 from functools import wraps
+
+# Import for accessing Flask and OpenAI secret keys as environment variables
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv(), override=True)
 
-# No need to import TextBlob if not used in the script
-# from textblob import TextBlob
-
+# Run Flask app
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY")
 
@@ -21,7 +22,8 @@ users = {
 
 # Load the sentiment analysis pipeline from huggingface
 sentiment_pipeline = pipeline(
-    "sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment"
+    "sentiment-analysis",
+    model="nlptown/bert-base-multilingual-uncased-sentiment",  # Used fine-tuned bert model as local model
 )
 
 
