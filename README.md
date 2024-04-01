@@ -60,3 +60,9 @@ To run the Flask application:
 ## Error Handling
 
 The service provides clear error messages to the user and logs errors server-side for diagnostics.
+
+## Unit Test
+
+Run the tests using the Python unittest module. From the root directory of the project, execute the following command:
+
+`python -m unittest discover -s tests`
