@@ -22,37 +22,37 @@ This project implements a sentiment analysis service using Flask, JWT for authen
 
 1. ### Clone the Repository
 
-'git clone https://github.com/vgsir/sentiment-analysis-service.git'
+`git clone https://github.com/vgsir/sentiment-analysis-service.git`
 
-'cd sentiment-analysis-service'
+`cd sentiment-analysis-service`
 
 2. ### Set up a Virtual Environment
 
-python -m venv venv
+`python -m venv venv`
 
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+`source venv/bin/activate  # On Windows use `venv\Scripts\activate``
 
 3. ### Install Dependencies
 
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 4. ### Environment Variables
 
-- Create a .env file in the root directory.
-- Add your FLASK_SECRET_KEY and OPENAI_API_KEY:
+- Create a `.env` file in the root directory.
+- Add your `FLASK_SECRET_KEY` and `OPENAI_API_KEY`:
 
-FLASK_SECRET_KEY=your_secret_key_here
+`FLASK_SECRET_KEY=your_secret_key_here`
 
-OPENAI_API_KEY=your_openai_api_key_here
+`OPENAI_API_KEY=your_openai_api_key_here`
 
 ## Usage
 
 To run the Flask application:
 
-flask run
+`flask run`
 
 ## API Endpoints
 
-POST /auth: Authenticate and receive a JWT token.
+`POST /auth`: Authenticate and receive a JWT token.
 
-POST /sentiment: Perform sentiment analysis on provided text. Requires JWT authentication.
+`POST /sentiment`: Perform sentiment analysis on provided text. Requires JWT authentication.
