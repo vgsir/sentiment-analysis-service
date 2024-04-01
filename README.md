@@ -1,6 +1,6 @@
 # Sentiment Analysis Service
 
-This project implements a sentiment analysis service using Flask, JWT for authentication, and the Transformers library for processing natural language data. It supports sentiment analysis via both OpenAI's API and a fallback local model powered by Hugging Face's Transformers.
+This project implements a sentiment analysis service using Flask, JWT for authentication, and the Transformers library for processing natural language data. It supports sentiment analysis via both OpenAI's API and a fallback local model powered by Hugging Face's Transformers. The service is protected using Bearer token authentication.
 
 ## Features
 
@@ -56,3 +56,7 @@ To run the Flask application:
 `POST /auth`: Authenticate and receive a JWT token.
 
 `POST /sentiment`: Perform sentiment analysis on provided text. Requires JWT authentication.
+
+## Error Handling
+
+The service provides clear error messages to the user and logs errors server-side for diagnostics.
