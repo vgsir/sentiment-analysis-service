@@ -1,6 +1,6 @@
 # Sentiment Analysis Service
 
-This project implements a sentiment analysis service using Flask, JWT for authentication, and the Transformers library for processing natural language data. It supports sentiment analysis via both OpenAI's API and a fallback local model powered by Hugging Face's Transformers. The service is protected using Bearer token authentication.
+This project implements a sentiment analysis service using Flask, JWT for authentication, and the Transformers library for processing natural language data. It supports sentiment analysis via both OpenAI's API and a fallback local model powered by Hugging Face's Transformers. The service is protected using Bearer token authentication. Also, a unit test is added to ensure that your endpoints and core functionalities work as expected.
 
 ## Features
 
@@ -30,7 +30,7 @@ This project implements a sentiment analysis service using Flask, JWT for authen
 
 `python -m venv venv`
 
-`source venv/bin/activate  # On Windows use `venv\Scripts\activate``
+`source venv/bin/activate`  # On Windows use `venv\Scripts\activate`
 
 3. ### Install Dependencies
 
@@ -66,3 +66,8 @@ The service provides clear error messages to the user and logs errors server-sid
 Run the tests using the Python unittest module. From the root directory of the project, execute the following command:
 
 `python -m unittest discover -s tests`
+
+## Deployment Instructions
+For local deployment, README file already contains instructions for setting up the virtual environment, installing dependencies, and starting the Flask server.
+
+For broader deployment scenarios, such as deploying to a cloud provider, running this Flask application on Heroku is suggested. Due to time and resource limitations, such deployment is not initialized in this current phase of the project.
